@@ -1,10 +1,17 @@
 pipeline {
     agent any
+
+    environment {
+        DB_TYPE     = 'MongoDB'
+        ENV_NAME    = 'local'
+    }
+
     stages {
 
         stage('build') {
             steps {
                 sh 'echo Build'
+                sh 'echo Running in ${ENV_NAME} with database type ${DB_TYPE}'
                 sh 'npm --version'
             }
         }
