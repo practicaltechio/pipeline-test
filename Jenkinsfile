@@ -16,6 +16,12 @@ pipeline {
             }
         }
 
+        stage('Sanity check') {
+            steps {
+                input "Does the build look ok?"
+            }
+        }
+
         stage('deploy') {
             steps {
                 sh 'echo Deploy'
