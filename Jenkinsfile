@@ -2,17 +2,45 @@ pipeline {
     agent any
 
     environment {
-        DB_TYPE     = 'MongoDB'
-        ENV_NAME    = 'local'
+        BUILD_LOCATION = '~/dev/staging/build'
+        TEST_ENV = '~/dev/staging/test'
+        TEST_PORT = 9001
+        RELEASE_LOCATION = '~/dev/staging/release'
+        PROD_ENV = '~/dev/staging/prod'
+        PROD_PORT = 9002
     }
 
     stages {
 
         stage('build') {
             steps {
-                sh 'echo Build'
-                sh 'echo Running in ${ENV_NAME} with database type ${DB_TYPE}'
-                sh 'npm --version'
+                sh 'echo Building'
+                sh 'npm i'
+                sh 'mkdir -p ${BUILD_LOCATION}'
+                sh 'zip -FSrq ${BUILD_LOCATION}/application.zip ./'
+                sh 'echo Build completed'
+            }
+        }
+
+        stage('test') {
+            steps {
+                sh 'echo Testing'
+                sh 'mkdir -p ${TEST_ENV}'
+                sh 'unzip -oq ${BUILD_LOCATION}/application.zip -d ${TEST_ENV}'
+                sh 'pm2 --name test-app start ${TEST_ENV}/index.js -- ${TEST_PORT}'
+                sh 'echo Running Postman tests...'
+                sh 'pm2 stop --silent test-app'
+                sh 'pm2 delete --silent test-app'
+                sh 'echo Test completed'
+            }
+        }
+
+
+        stage('release') {
+            steps {
+                sh 'echo Releasing'
+                sh 'cp -rf ${BUILD_LOCATION}/application.zip ${RELEASE_LOCATION}/application.zip'
+                sh 'echo Release completed'
             }
         }
 
@@ -25,6 +53,13 @@ pipeline {
         stage('deploy') {
             steps {
                 sh 'echo Deploy'
+                sh 'mkdir -p ${PROD_ENV}'
+                sh 'pm2 stop --silent prod-app'
+                sh 'pm2 delete --silent prod-app'
+                sh 'unzip -oq ${RELEASE_LOCATION}/application.zip -d ${PROD_ENV}'
+                sh 'pm2 --name prod-app start ${PROD_ENV}/index.js -- ${PROD_PORT}'
+                sh 'echo Deploy completed'
+
             }
         }
     }

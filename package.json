@@ -1,0 +1,24 @@
+{
+  "name": "09-cicd-pipeline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/practicaltechio/pipeline-test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/practicaltechio/pipeline-test/issues"
+  },
+  "homepage": "https://github.com/practicaltechio/pipeline-test#readme",
+  "dependencies": {
+    "koa": "^2.13.1",
+    "koa-router": "^10.0.0",
+    "pm2": "^4.5.4"
+  }
+}
