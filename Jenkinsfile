@@ -16,7 +16,10 @@ pipeline {
             steps {
                 echo 'Building # ${BUILD_NUMBER}'
                 sh 'npm i'
-                zip zipFile: 'application_v${BUILD_NUMBER}.zip'
+                script {
+                  zip zipFile: 'application_v${BUILD_NUMBER}.zip', dir: '.', archive: 'true'
+                }
+                
                 echo 'Build completed'
             }
         }
