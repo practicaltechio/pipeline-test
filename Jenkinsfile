@@ -25,9 +25,9 @@ pipeline {
         stage('test') {
             steps {
                 sh 'echo Testing'
-                sh 'mkdir -p ${TEST_ENV}'
+                sh 'mkdir -p ${BUILD_HOME}/${TEST_ENV}'
                 sh 'unzip -oq ${BUILD_HOME}/${BUILD_LOCATION}/application_${BUILD_NUMBER}.zip -d ${BUILD_HOME}/${TEST_ENV}'
-                sh 'pm2 --name test-app start ${TEST_ENV}/index.js -- ${TEST_PORT}'
+                sh 'pm2 --name test-app start ${BUILD_HOME}/${TEST_ENV}/index.js -- ${TEST_PORT}'
                 sh 'echo Running Postman tests...'
                 sh 'pm2 stop --silent test-app'
                 sh 'pm2 delete --silent test-app'
