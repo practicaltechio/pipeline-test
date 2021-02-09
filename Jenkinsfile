@@ -24,7 +24,7 @@ pipeline {
         stage('test') {
             steps {
                 echo 'Testing'
-                unzip zipFile: 'application_v${BUILD_NUMBER}.zip' dir: '${BUILD_HOME}/${TEST_ENV}'
+                unzip zipFile: 'application_v${BUILD_NUMBER}.zip', dir: '${BUILD_HOME}/${TEST_ENV}'
                 sh 'pm2 --name test-app start ${BUILD_HOME}/${TEST_ENV}/index.js -- ${TEST_PORT}'
                 echo 'Running Postman tests...'
                 sh 'pm2 stop --silent test-app'
@@ -63,7 +63,7 @@ pipeline {
                 dir('${BUILD_HOME}/${PROD_ENV}') {
                   deleteDir()
                 }
-                unzip zipFile: 'application_v${BUILD_NUMBER}.zip' dir: '${BUILD_HOME}/${PROD_ENV}'
+                unzip zipFile: 'application_v${BUILD_NUMBER}.zip', dir: '${BUILD_HOME}/${PROD_ENV}'
                 sh 'pm2 --name prod-app start ${BUILD_HOME}/${PROD_ENV}/index.js -- ${PROD_PORT}'
                 echo 'Deploy completed'
             }
