@@ -14,10 +14,10 @@ pipeline {
 
         stage('build') {
             steps {
-                sh 'echo Building'
+                sh 'echo Building # ${BUILD_NUMBER}'
                 sh 'npm i'
                 sh 'mkdir -p ${BUILD_LOCATION}'
-                sh 'zip -rq ${BUILD_LOCATION}/application_${BUILD_NUMBER}.zip ./*'
+                sh 'zip -rq ${BUILD_LOCATION}/application.zip ./*'
                 sh 'echo Build completed'
             }
         }
