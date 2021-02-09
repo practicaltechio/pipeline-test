@@ -39,6 +39,7 @@ pipeline {
         stage('release') {
             steps {
                 sh 'echo Releasing'
+                sh 'mkdir -p ${RELEASE_LOCATION}'
                 sh 'cp -rf ${BUILD_LOCATION}/application.zip ${RELEASE_LOCATION}/application.zip'
                 sh 'echo Release completed'
             }
