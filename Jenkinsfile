@@ -55,8 +55,8 @@ pipeline {
             steps {
                 sh 'echo Deploy'
                 sh 'mkdir -p ${PROD_ENV}'
-                sh 'pm2 stop prod-app'
-                sh 'pm2 delete prod-app'
+                sh 'pm2 stop prod-app' || true
+                sh 'pm2 delete prod-app' || true
                 sh 'unzip -oq ${RELEASE_LOCATION}/application.zip -d ${PROD_ENV}'
                 sh 'pm2 --name prod-app start ${PROD_ENV}/index.js -- ${PROD_PORT}'
                 sh 'echo Deploy completed'
