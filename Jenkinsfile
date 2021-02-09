@@ -12,12 +12,6 @@ pipeline {
 
     stages {
 
-        stage('info') {
-          steps {
-            sh 'User home directory: ${user.home}'
-          }
-        }
-
         stage('build') {
             steps {
                 sh 'echo Building # ${BUILD_NUMBER}'
