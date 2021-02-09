@@ -17,7 +17,7 @@ pipeline {
                 sh 'echo Building'
                 sh 'npm i'
                 sh 'mkdir -p ${BUILD_LOCATION}'
-                sh 'zip -FSrq ${BUILD_LOCATION}/application.zip ./'
+                sh 'zip -rq ${BUILD_LOCATION}/application_${BUILD_NUMBER}.zip ./*'
                 sh 'echo Build completed'
             }
         }
@@ -26,7 +26,7 @@ pipeline {
             steps {
                 sh 'echo Testing'
                 sh 'mkdir -p ${TEST_ENV}'
-                sh 'unzip -oq ${BUILD_LOCATION}/application.zip -d ${TEST_ENV}'
+                sh 'unzip -oq ${BUILD_LOCATION}/application_${BUILD_NUMBER}.zip -d ${TEST_ENV}'
                 sh 'pm2 --name test-app start ${TEST_ENV}/index.js -- ${TEST_PORT}'
                 sh 'echo Running Postman tests...'
                 sh 'pm2 stop --silent test-app'
@@ -40,7 +40,7 @@ pipeline {
             steps {
                 sh 'echo Releasing'
                 sh 'mkdir -p ${RELEASE_LOCATION}'
-                sh 'cp -rf ${BUILD_LOCATION}/application.zip ${RELEASE_LOCATION}/application.zip'
+                sh 'cp -rf ${BUILD_LOCATION}/application_${BUILD_NUMBER}.zip ${RELEASE_LOCATION}/application_${BUILD_NUMBER}.zip'
                 sh 'echo Release completed'
             }
         }
@@ -59,7 +59,7 @@ pipeline {
                   sh 'pm2 stop prod-app' 
                   sh 'pm2 delete prod-app'
                 }
-                sh 'unzip -oq ${RELEASE_LOCATION}/application.zip -d ${PROD_ENV}'
+                sh 'unzip -oq ${RELEASE_LOCATION}/application_${BUILD_NUMBER}.zip -d ${PROD_ENV}'
                 sh 'pm2 --name prod-app start ${PROD_ENV}/index.js -- ${PROD_PORT}'
                 sh 'echo Deploy completed'
             }
@@ -68,16 +68,17 @@ pipeline {
 
      post {
         always {
-            echo 'This will always run'
+            echo 'Cleaning TEST environment'
+            sh 'rm -rf ${TEST_ENV}'
         }
         success {
-            echo 'This will run only if successful'
+            echo 'Build is successful'
         }
         failure {
-            echo 'This will run only if failed'
+            echo 'Build failed'
         }
         unstable {
-            echo 'This will run only if the run was marked as unstable'
+            echo 'Build was marked as unstable'
         }
         changed {
             echo 'This will run only if the state of the Pipeline has changed'
