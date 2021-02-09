@@ -17,7 +17,7 @@ pipeline {
                 sh 'echo Building # ${BUILD_NUMBER}'
                 sh 'npm i'
                 sh 'mkdir -p ${BUILD_LOCATION}'
-                sh 'zip -rq ${BUILD_LOCATION}/application.zip ./*'
+                sh 'zip -rq ${BUILD_LOCATION}/application_${BUILD_NUMBER}.zip ./*'
                 sh 'echo Build completed'
             }
         }
@@ -68,8 +68,10 @@ pipeline {
 
      post {
         always {
-            echo 'Cleaning TEST environment'
+            echo 'Cleaning build and test environment'
+            deleteDir()
             sh 'rm -rf ${TEST_ENV}'
+            
         }
         success {
             echo 'Build is successful'
