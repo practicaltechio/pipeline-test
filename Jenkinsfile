@@ -16,8 +16,7 @@ pipeline {
             steps {
                 sh 'echo Building # ${BUILD_NUMBER}'
                 sh 'npm i'
-                sh 'mkdir -p ${BUILD_LOCATION}'
-                sh 'zip -rq ${BUILD_HOME}/${BUILD_LOCATION}/application_${BUILD_NUMBER}.zip ./*'
+                sh 'zip -rq application_v${BUILD_NUMBER}.zip ./*'
                 sh 'echo Build completed'
             }
         }
@@ -70,11 +69,13 @@ pipeline {
         always {
             echo 'Cleaning build and test environment'
             deleteDir()
-            sh 'rm -rf ${BUILD_HOME}/${TEST_ENV}'
-            
+            dir('${BUILD_HOME}/${TEST_ENV}') {
+              deleteDir()
+            }                      
         }
         success {
             echo 'Build is successful'
+            archiveArtifacts artifacts: 'application_v${BUILD_NUMBER}.zip'
         }
         failure {
             echo 'Build failed'
