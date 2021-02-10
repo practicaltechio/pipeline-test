@@ -39,7 +39,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:9002/sum?term1=2&term2=5",
+					"raw": "http://localhost:9001/sum?term1=2&term2=5",
 					"protocol": "http",
 					"host": [
 						"localhost"
