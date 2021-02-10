@@ -34,9 +34,11 @@ pipeline {
                   unzip zipFile: "application_v${BUILD_NUMBER}.zip", dir: "${env.BUILD_HOME}/${TEST_ENV}", quiet: true
                 }
                 
-                sh "pm2 --name test-app start ${env.BUILD_HOME}/${TEST_ENV}/index.js -- ${TEST_PORT}"                
+                sh "pm2 -f --name test-app start ${env.BUILD_HOME}/${TEST_ENV}/index.js -- ${TEST_PORT}"                
                 echo "Running Postman tests..."
                 sh "newman run postman-tests.json"
+                sh "pm2 stop --silent test-app"
+                sh "pm2 delete --silent test-app"
                 echo "Test completed"
             }
         }
