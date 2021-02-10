@@ -69,7 +69,7 @@ pipeline {
                 dir("${env.BUILD_HOME}/${PROD_ENV}") {
                   deleteDir()
                 }
-                unzip zipFile: application_v${BUILD_NUMBER}.zip", dir: "${env.BUILD_HOME}/${PROD_ENV}"
+                unzip zipFile: "application_v${BUILD_NUMBER}.zip", dir: "${env.BUILD_HOME}/${PROD_ENV}"
                 sh "pm2 --name prod-app start ${env.BUILD_HOME}/${PROD_ENV}/index.js -- ${PROD_PORT}"
                 echo "Deploy completed"
             }
