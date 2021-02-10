@@ -69,7 +69,9 @@ pipeline {
                 dir("${env.BUILD_HOME}/${PROD_ENV}") {
                   deleteDir()
                 }
-                unzip zipFile: "application_v${BUILD_NUMBER}.zip", dir: "${env.BUILD_HOME}/${PROD_ENV}"
+                script {
+                  unzip zipFile: "application_v${BUILD_NUMBER}.zip", dir: "${env.BUILD_HOME}/${PROD_ENV}", quiet: true
+                }                
                 sh "pm2 --name prod-app start ${env.BUILD_HOME}/${PROD_ENV}/index.js -- ${PROD_PORT}"
                 echo "Deploy completed"
             }
@@ -86,7 +88,7 @@ pipeline {
         }
         success {
             echo "Build is successful"
-            archiveArtifacts artifacts: "application_v${BUILD_NUMBER}.zip"
+            //archiveArtifacts artifacts: "application_v${BUILD_NUMBER}.zip"
         }
         failure {
             echo "Build failed"
