@@ -87,8 +87,8 @@ pipeline {
             echo "Cleaning build and test environment"
             deleteDir()
             catchError {
-              sh "pm2 stop prod-app"
-              sh "pm2 delete prod-app"
+              sh "pm2 stop test-app"
+              sh "pm2 delete test-app"
             }
             dir('${env.BUILD_HOME}/${TEST_ENV}') {
               deleteDir()
