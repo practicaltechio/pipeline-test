@@ -15,7 +15,7 @@ router.get('', '/', (ctx) => {
 
 router.get('', '/sum', (ctx) => {
   ctx.body = {
-    result: parseInt(ctx.request.query.term1) + parseInt(ctx.request.query.term2)
+    result: parseInt(ctx.request.query.term1) - parseInt(ctx.request.query.term2)
   }
 })
 
