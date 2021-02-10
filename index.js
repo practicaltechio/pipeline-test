@@ -7,7 +7,10 @@ const app = new koa()
 const router = new koaRouter()
 
 router.get('', '/', (ctx) => {
-  ctx.body = "Welcome to PracticalTech !"
+  ctx.body = {
+    message: 'Welcome to Practical Tech!',
+    version: '1.0'
+  }
 })
 
 router.get('', '/sum', (ctx) => {
