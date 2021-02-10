@@ -35,8 +35,10 @@ pipeline {
                 }
                 
                 sh "pm2 --name test-app start ${env.BUILD_HOME}/${TEST_ENV}/index.js -- ${TEST_PORT}"
-                echo "Running Postman tests..."
-                sh "newman run postman-tests.json"
+                catchError {
+                  echo "Running Postman tests..."
+                  sh "newman run postman-tests.json"
+                }
                 sh "pm2 stop --silent test-app"
                 sh "pm2 delete --silent test-app"
                 echo "Test completed"
@@ -86,11 +88,7 @@ pipeline {
         always {
             echo "Cleaning build and test environment"
             deleteDir()
-            catchError {
-              sh "pm2 stop test-app"
-              sh "pm2 delete test-app"
-            }
-            dir('${env.BUILD_HOME}/${TEST_ENV}') {
+            dir("${env.BUILD_HOME}/${TEST_ENV}") {
               deleteDir()
             }                      
         }
