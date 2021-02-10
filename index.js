@@ -9,7 +9,7 @@ const router = new koaRouter()
 router.get('', '/', (ctx) => {
   ctx.body = {
     message: 'Welcome to Practical Tech!',
-    version: '1.0'
+    version: '1.1'
   }
 })
 
