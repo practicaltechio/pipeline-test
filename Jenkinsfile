@@ -34,13 +34,9 @@ pipeline {
                   unzip zipFile: "application_v${BUILD_NUMBER}.zip", dir: "${env.BUILD_HOME}/${TEST_ENV}", quiet: true
                 }
                 
-                sh "pm2 --name test-app start ${env.BUILD_HOME}/${TEST_ENV}/index.js -- ${TEST_PORT}"
-                catchError {
-                  echo "Running Postman tests..."
-                  sh "newman run postman-tests.json"
-                }
-                sh "pm2 stop --silent test-app"
-                sh "pm2 delete --silent test-app"
+                sh "pm2 --name test-app start ${env.BUILD_HOME}/${TEST_ENV}/index.js -- ${TEST_PORT}"                
+                echo "Running Postman tests..."
+                sh "newman run postman-tests.json"
                 echo "Test completed"
             }
         }
@@ -97,6 +93,10 @@ pipeline {
         }
         failure {
             echo "Build failed"
+            catchError {
+              sh "pm2 stop --silent test-app"
+              sh "pm2 delete --silent test-app"
+            }
         }
         unstable {
             echo "Build was marked as unstable"
