@@ -14,11 +14,11 @@ pipeline {
 
         stage('build') {
             steps {
-                echo 'Build home ${env.BUILD_HOME}'
-                echo 'Build # ${BUILD_NUMBER}'
+                echo 'Build home' ${env.BUILD_HOME}
+                echo 'Build #' ${BUILD_NUMBER}
                 sh 'npm i'   
                 script {
-                  zip zipFile: 'application_v${BUILD_NUMBER}.zip', dir: '.', archive: 'true'                
+                  zip zipFile: application_v${BUILD_NUMBER}.zip, dir: '.', archive: 'true'                
                 }                             
                 echo 'Build completed'
             }
