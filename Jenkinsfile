@@ -14,12 +14,10 @@ pipeline {
 
         stage('build') {
             steps {
+                echo 'BUILD_HOME ${env.BUILD_HOME}'
                 echo 'Building # ${BUILD_NUMBER}'
-                sh 'npm i'
-                script {
-                  zip zipFile: 'application_v${BUILD_NUMBER}.zip', dir: '.', archive: 'true'
-                }
-                
+                sh 'npm i'                
+                zip zipFile: 'application_v${BUILD_NUMBER}.zip', dir: '.', archive: 'true'                
                 echo 'Build completed'
             }
         }
@@ -27,8 +25,8 @@ pipeline {
         stage('test') {
             steps {
                 echo 'Testing'
-                unzip zipFile: 'application_v${BUILD_NUMBER}.zip', dir: '${BUILD_HOME}/${TEST_ENV}'
-                sh 'pm2 --name test-app start ${BUILD_HOME}/${TEST_ENV}/index.js -- ${TEST_PORT}'
+                unzip zipFile: 'application_v${BUILD_NUMBER}.zip', dir: '${env.BUILD_HOME}/${TEST_ENV}'
+                sh 'pm2 --name test-app start ${env.BUILD_HOME}/${TEST_ENV}/index.js -- ${TEST_PORT}'
                 echo 'Running Postman tests...'
                 sh 'pm2 stop --silent test-app'
                 sh 'pm2 delete --silent test-app'
@@ -44,7 +42,7 @@ pipeline {
                   excludes: '',
                   flattenFiles: false,
                   includes: 'application_v${BUILD_NUMBER}.zip',
-                  targetLocation: '${BUILD_HOME}/${RELEASE_LOCATION}'
+                  targetLocation: '${env.BUILD_HOME}/${RELEASE_LOCATION}'
                 )])
                 echo 'Release completed'
             }
@@ -66,8 +64,8 @@ pipeline {
                 dir('${BUILD_HOME}/${PROD_ENV}') {
                   deleteDir()
                 }
-                unzip zipFile: 'application_v${BUILD_NUMBER}.zip', dir: '${BUILD_HOME}/${PROD_ENV}'
-                sh 'pm2 --name prod-app start ${BUILD_HOME}/${PROD_ENV}/index.js -- ${PROD_PORT}'
+                unzip zipFile: 'application_v${BUILD_NUMBER}.zip', dir: '${env.BUILD_HOME}/${PROD_ENV}'
+                sh 'pm2 --name prod-app start ${env.BUILD_HOME}/${PROD_ENV}/index.js -- ${PROD_PORT}'
                 echo 'Deploy completed'
             }
         }
@@ -76,8 +74,8 @@ pipeline {
      post {
         always {
             echo 'Cleaning build and test environment'
-            deleteDir()
-            dir('${BUILD_HOME}/${TEST_ENV}') {
+            // deleteDir()
+            dir('${env.BUILD_HOME}/${TEST_ENV}') {
               deleteDir()
             }                      
         }
