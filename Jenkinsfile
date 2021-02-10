@@ -81,14 +81,13 @@ pipeline {
      post {
         always {
             echo "Cleaning build and test environment"
-            // deleteDir()
-            // dir('${env.BUILD_HOME}/${TEST_ENV}') {
-            //   deleteDir()
-            // }                      
+            deleteDir()
+            dir('${env.BUILD_HOME}/${TEST_ENV}') {
+              deleteDir()
+            }                      
         }
         success {
             echo "Build is successful"
-            //archiveArtifacts artifacts: "application_v${BUILD_NUMBER}.zip"
         }
         failure {
             echo "Build failed"
