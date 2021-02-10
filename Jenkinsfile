@@ -14,20 +14,20 @@ pipeline {
 
         stage('build') {
             steps {
-                echo 'Build home' ${env.BUILD_HOME}
-                echo 'Build #' ${BUILD_NUMBER}
-                sh 'npm i'   
+                echo "Build home ${env.BUILD_HOME}"
+                echo "Build # ${BUILD_NUMBER}"
+                sh "npm i"
                 script {
-                  zip zipFile: application_v${BUILD_NUMBER}.zip, dir: '.', archive: 'true'                
+                  zip zipFile: "application_v${BUILD_NUMBER}.zip", dir: ".", archive: "true"
                 }                             
-                echo 'Build completed'
+                echo "Build completed"
             }
         }
 
         stage('test') {
             steps {
                 echo 'Testing'
-                unzip zipFile: 'application_v${BUILD_NUMBER}.zip', dir: '${env.BUILD_HOME}/${TEST_ENV}'
+                unzip zipFile: "application_v${BUILD_NUMBER}.zip", dir: "${env.BUILD_HOME}/${TEST_ENV}"
                 sh 'pm2 --name test-app start ${env.BUILD_HOME}/${TEST_ENV}/index.js -- ${TEST_PORT}'
                 echo 'Running Postman tests...'
                 sh 'pm2 stop --silent test-app'
