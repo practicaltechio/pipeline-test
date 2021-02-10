@@ -1,0 +1,67 @@
+{
+	"info": {
+		"_postman_id": "37183c2e-c45c-4522-a93a-202faa8f8792",
+		"name": "PracticalTech-Pipeline",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Test SUM service",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6ca04606-0752-48ed-91c6-b8aa912805b0",
+						"exec": [
+							"let json = pm.response.json();",
+							"",
+							"// Response is OK",
+							"pm.test('Response is OK', function () {",
+							"",
+							"    // Status is 200",
+							"    pm.response.to.have.status(200)",
+							"    // Response time",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000)",
+							"",
+							"}); ",
+							"            ",
+							"// Result is correct",
+							"pm.test('Account object created', function () {    ",
+							"    pm.expect(json.result).to.equal(7)",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9002/sum?term1=2&term2=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9002",
+					"path": [
+						"sum"
+					],
+					"query": [
+						{
+							"key": "term1",
+							"value": "2"
+						},
+						{
+							"key": "term2",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
