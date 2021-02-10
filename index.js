@@ -9,13 +9,13 @@ const router = new koaRouter()
 router.get('', '/', (ctx) => {
   ctx.body = {
     message: 'Welcome to Practical Tech!',
-    version: '1.2'
+    version: '1.3'
   }
 })
 
 router.get('', '/sum', (ctx) => {
   ctx.body = {
-    result: parseInt(ctx.request.query.term1) + parseInt(ctx.request.query.term2)
+    result: parseInt(ctx.request.query.term1) - parseInt(ctx.request.query.term2)
   }
 })
 
