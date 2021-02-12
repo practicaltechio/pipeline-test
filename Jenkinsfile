@@ -1,11 +1,12 @@
 pipeline {
+    
     agent any
-    triggers {
-        pollSCM '* * * * *'
-    }
+
+    // triggers {
+    //     pollSCM '* * * * *'
+    // }
 
     environment {
-        BUILD_LOCATION = 'build'
         TEST_ENV = 'test'
         TEST_PORT = 9001
         RELEASE_LOCATION = 'release'
@@ -57,11 +58,11 @@ pipeline {
             }
         }
 
-        // stage('Sanity check') {
-        //     steps {
-        //         input "Do you want to deploy this release to production?"
-        //     }
-        // }
+        stage('Sanity check') {
+            steps {
+                input "Do you want to deploy this release to production?"
+            }
+        }
 
         stage('deploy') {
             steps {
