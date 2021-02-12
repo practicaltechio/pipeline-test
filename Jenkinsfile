@@ -2,9 +2,9 @@ pipeline {
     
     agent any
 
-    // triggers {
-    //     pollSCM '* * * * *'
-    // }
+    triggers {
+        pollSCM '* * * * *'
+    }
 
     environment {
         TEST_ENV = 'test'
