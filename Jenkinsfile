@@ -58,11 +58,11 @@ pipeline {
             }
         }
 
-        stage('Sanity check') {
-            steps {
-                input "Do you want to deploy this release to production?"
-            }
-        }
+        // stage('Sanity check') {
+        //     steps {
+        //         input "Do you want to deploy this release to production?"
+        //     }
+        // }
 
         stage('deploy') {
             steps {
